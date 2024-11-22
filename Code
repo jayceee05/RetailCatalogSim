@@ -1,0 +1,124 @@
+# -*- coding: utf-8 -*-
+
+class Articulo:
+    def __init__(self, nombre, precio, stock, identificador):
+        self.nombre = nombre
+        self.precio = precio
+        self.stock = stock
+        self.identificador = identificador
+        
+    def agregarArticulo(self, catalogo):                            # Header
+        '''
+        input -> self.nombre                                        # Structure
+        input -> self.precio
+        input -> self.stock
+        input -> self.identificador
+        articuloNuevo -> catalogo[]
+    
+        Esta funcion le pide al usuario los datos necesarios para   # Description
+        agregar un articulo nuevo al catalogo
+        
+        Rocket -> self.nombre                                        # Examples
+        350 -> self.precio
+        3 -> self.stock
+        5 -> self.identificador
+        articuloNuevo -> catalogo[(Rocket, 350, 3, 5)]
+        
+        War -> self.nombre
+        700 -> self.precio
+        2 -> self.stock
+        6 -> self.identificador
+        articuloNuevo -> catalogo[(Rocket, 350, 3, 5), (War, 700, 2, 6)]
+        '''
+        self.nombre = input("Nombre del articulo nuevo: ")          # Body
+        self.precio = int(input("Precio: "))
+        self.stock = int(input("Stock: "))
+        self.identificador = input("ID: ")
+        catalogo.append(articuloNuevo)
+        
+def listarDisponibles(catalogo):                                    # Header
+    '''
+    catalago[# de elementos] -> (i.nombre, i.precio, i.stock)       # Structure
+    
+    Imprime los elementos mencionados por cada elemento dentro      # Description
+    del catalogo
+    
+    catalogo[2] -> (Rocket, 350, 3), (War, 700, 2)                  # Example
+    '''
+    for i in catalogo:                                              # Body
+        print("Nombre:", i.nombre, "    Precio:     $", i.precio, "   Stock:", 
+              i.stock)
+
+def vender(catalogo, precioFinal, cantVentas, cantArticulosFinal):  # Header
+    '''
+    input -> identificador                                          # Structure
+    cantidad <= stock:
+        precioFinal + (precio * cantidad) -> precioFinal
+        stock - cantidad -> stock
+        cantArticulosFinal + cantidad -> cantArticulosFinal
+        cantVentas + 1 -> cantVentas
+    
+    Primero checa cual articulo es de acuerdo al identificador.     # Description
+    Segundo checa si hay suficiente stock de acuerdo a la cantidad ordenada. 
+    Si hay stock suficiente, suma el total de venta al precio final, 
+    le resta la cantidad vendida al stock, 
+    suma la cantidad de articulos vendidos y suma 1 al total de ventas.
+    
+    input(3) -> 3                                                   # Examples
+    5 <= 10:
+        0 + (300 * 5) -> 1500
+        10 - 5 -> 5
+        0 + 5 -> 5
+        0 + 1 -> 1
+        
+    input(2) -> 2                                      
+    3 <= 3:
+        1500 + (500 * 3) -> 1500
+        3 - 3-> 0
+        5 + 3 -> 8
+        1 + 1 -> 2
+    '''
+    opcion = input("Ingrese ID del producto: ")              
+    for i in catalogo:
+        if opcion == i.identificador:
+            cantidad = input("Cantidad: ")
+            if int(cantidad) <= int(i.stock):
+                precioFinal += int(i.precio * int(cantidad))
+                i.stock -= int(cantidad)
+                cantArticulosFinal += cantidad
+                cantVentas += 1
+                print("Total: $", (i.precio * int(cantidad)))
+            else:
+                print("No hay suficiente stock :(")
+
+# Agrega los articulos predeterminados
+catalogo = [Articulo("Splatoon", 1299, 5, "1"), Articulo("Metroid", 1299, 3, "2"),
+            Articulo("Smash", 1299, 4, "3"), Articulo("Fifa", 599, 1, "4")]
+# Prepara varibales para usarlas mas adelante
+precioFinal = 0
+cantVentas = 0
+cantArticulosFinal = 0
+articuloNuevo = Articulo("", 0, 0, "")
+
+# Mensaje de bienvenida
+print("---JuegosChidos.com---")
+# Ciclo que termina cuando el usuario no elija "s" al final
+while True:
+    opcion = input("1. Agregar al catalogo \n2. Listar catalogo \n3. Vender juego")
+    # Comienza una función de acuerdo a la opción elejida
+    if opcion == "1":
+        articuloNuevo.agregarArticulo(catalogo)
+    elif opcion == "2":
+        listarDisponibles(catalogo)
+    elif opcion == "3":
+        vender(catalogo, precioFinal, cantVentas, cantArticulosFinal)
+    else:
+        print("Opcion no valida")
+    # Preguntar si quiere continuar
+    opcion = input("Continuar del programa? (s/n): ")
+    if opcion.lower() != "s":
+        # Imprime el reporte final
+        print("Venta total:", cantVentas)
+        print("Importe total:", precioFinal)
+        print("Total de articulos vendidos:", cantArticulosFinal)
+        break
